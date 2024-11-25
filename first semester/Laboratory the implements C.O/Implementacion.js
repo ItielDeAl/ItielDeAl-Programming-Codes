@@ -92,23 +92,23 @@ let operacion = prompt("Ingrese la acción a realizar: \n1=convertir binario a d
             let Multiplicador = binarioDecimal(binarioM2);
             let resultado5 = multiplicando*Multiplicador;
             let resutadoBinarioM = decimalBinario(resultado5);
-            alert('El resulado de la multiplicacion es es '+ resutadoBinarioM);
+            alert('El resulado de la multiplicacion es '+ resutadoBinarioM);
             break;
         //Division
         case '6':
-            let dividendo = prompt("Introduce el primer número decimal:");
-            let divisor = prompt("Introduce el segundo número decimal:");
+            let dividendo = prompt("Introduce el dividendo");
+            let divisor = prompt("Introduce el divisor:");
             let numero1 = binarioDecimal(dividendo);
             let numero2= binarioDecimal(divisor);
             if (numero2 === 0) {
-              alert("No se puede dividir entre cero.");
+              alert("No se puede dividir entre cero");
             } else {
               let cociente = Math.floor(numero1 / numero2);  
               let residuo = numero1 % numero2; 
               let cocienteD = decimalBinario(cociente);
               let residuoD = decimalBinario(residuo);
               alert("EL cociente es: " + cocienteD);
-              alert("EL Residuo de la division: " + residuoDD);
+              alert("EL Residuo es: " + residuoD);
             }
             
         

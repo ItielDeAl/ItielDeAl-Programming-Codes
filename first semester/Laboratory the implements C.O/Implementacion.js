@@ -96,9 +96,22 @@ let operacion = prompt("Ingrese la acción a realizar: \n1=convertir binario a d
             break;
         //Division
         case '6':
+            let dividendo = prompt("Introduce el primer número decimal:");
+            let divisor = prompt("Introduce el segundo número decimal:");
+            let numero1 = binarioDecimal(dividendo);
+            let numero2= binarioDecimal(divisor);
+            if (numero2 === 0) {
+              alert("No se puede dividir entre cero.");
+            } else {
+              let cociente = Math.floor(numero1 / numero2);  
+              let residuo = numero1 % numero2; 
+              let cocienteD = decimalBinario(cociente);
+              let residuoD = decimalBinario(residuo);
+              alert("EL cociente es: " + cocienteD);
+              alert("EL Residuo de la division: " + residuoDD);
+            }
+            
         
-            
-            
         
             break;
         //Salir

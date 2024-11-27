@@ -1,5 +1,5 @@
 let binario1 = prompt("Ingresa el binario 1");
-let binario2 = prompt("Ingresa el binario 1"); 
+let binario2 = prompt("Ingresa el binario 2"); 
 
 function binarioDecimal(bn){
 //Conversion de binario a decimal

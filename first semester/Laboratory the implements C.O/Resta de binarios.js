@@ -1,6 +1,7 @@
 let binario1 = prompt("Ingresa el binario 1");
 let binario2 = prompt("Ingresa el binario 2"); 
 
+
 function binarioDecimal(bn){
 //Conversion de binario a decimal
 //let bn = prompt("Ingresa el numero binario"); // Numero en binario
@@ -53,5 +54,13 @@ if(dc <= 0){
 let minuendo = binarioDecimal(binario1);
 let sustraendo = binarioDecimal(binario2);
 let resultado = minuendo-sustraendo;
-let resutadoBinario = decimalBinario(resultado);
-console.log(resutadoBinario);
+if (resultado<0) {
+    let positivo = resultado*-1;
+    let resutadoBinario = decimalBinario(positivo);
+    console.log("-"+resutadoBinario);
+}else{
+    let resutadoBinario = decimalBinario(resultado);
+    console.log(resutadoBinario);
+}
+
+

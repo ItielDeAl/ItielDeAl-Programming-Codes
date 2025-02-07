@@ -64,21 +64,20 @@ boleto3 = Boletos("1000", "1-3", "VIP")
 print("precio $" + boleto1.precio, ", fila " + boleto1.fila, ", zona " + boleto1.zona)
 print("precio $" + boleto2.precio, ", fila " + boleto2.fila, ", zona " + boleto2.zona)
 print("precio $" + boleto3.precio, ", fila " + boleto3.fila, ", zona " + boleto3.zona)
-"""
-"""
-#Definimos la clase
+
+
 class Reposteria:
-    #constructor
+  
     def __init__(self, precio, nombre):
         self.precio = precio
         self.nombre = nombre
         
-#Creacion de objeto
+
 postre1 = Reposteria("$15", "Rebananda de pay")
 postre2 = Reposteria("$10", "cupcake")
 postre3 = Reposteria("$100", "Pay completo")
 
-#Imprimir atributos
+
 print(postre1.nombre, postre1.precio)
 print(postre2.nombre, postre2.precio)
 print(postre3.nombre, postre3.precio)

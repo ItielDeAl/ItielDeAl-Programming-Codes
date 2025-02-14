@@ -3,8 +3,8 @@ class Persona { //nombre
         this.nombre = nombre;
         this.edad = edad;
     }
-saludar() {
-        return "Hola, me llamo " + this.nombre +" y tengo " +this.edad + " años.";
+    saludar() {
+        return `Hola, me llamo ${this.nombre} y tengo ${this.edad} años.`;
     }
 }
 // Uso de la clase

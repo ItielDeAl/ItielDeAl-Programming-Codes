@@ -12,8 +12,11 @@ y1 = (-1/3)*x+2
 #intersecion 
 xi = 3 
 yi = 1
-#Imprimir
+
+#Imprimir derivada
 plt.plot(x,y, label='Derivada')
+
+#Imprimir recta tangente
 plt.plot(x1,y1,'r--', label='Tangente')
 
 #imprimir punto

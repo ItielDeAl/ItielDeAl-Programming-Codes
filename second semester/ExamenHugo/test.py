@@ -1,10 +1,14 @@
 #Examen Hugo
-class Animal: #clase
-    def __init__(self, raza, salvaje) #metodo
-        self.raza = raza #atributo
+#deinimos clase
+Class Animal: 
+#definimos atributos
+    def __init__(self, salvaje, agresivo):
         self.salvaje = salvaje
-    
-    def saludo(f`El {self.raza} es un animal de naturaleza {self.salvaje}´)#llamar
-               print()
-animal1 = Animal(Leon, agresivo)#definir objeto
-animal2 = Animal(perro, amigable)#definir objeto
+        self.agresivo = agresivo
+#definimos metodo  
+    def saludar(self):
+        return r'El {self.salvaje} es un animal {self.agresivo}'
+#definimos instancias
+animal 1 = Animal("Leon", feroz)
+mensaje = animal1.saludar()
+print(mensaje)

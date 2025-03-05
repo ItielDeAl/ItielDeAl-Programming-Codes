@@ -35,7 +35,7 @@ class Salon{
         this.nombre = nombre;
         Salon.contador--;
     }
-    mostrarInformacion(){
+    mostrarAlumno(){
         return `nombre ${this.nombre}`;
     }
     static obtenerTotalAlumnos(){
@@ -48,7 +48,7 @@ for (contador1; contador1 >= 0; contador1--){
      
     if (contador1 > 0) {
         const persona1 = new Salon(prompt("ingresa tu nombre"))
-        console.log(persona1.mostrarInformacion());
+        console.log(persona1.mostrarAlumno());
         console.log(`Espacios ${Salon.obtenerTotalAlumnos()}`);
         
     } else {

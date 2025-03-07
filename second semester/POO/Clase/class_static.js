@@ -49,7 +49,9 @@ for (contador1; contador1 >= 0; contador1--){
      
     if (contador1 > 0) {
         const persona1 = new Salon(prompt("ingresa el nombre"))
-        nombres.push(persona1.nombre)
+        
+        //Agregar al arreglo
+        nombres.push(persona1.nombre);
         console.log(persona1.mostrarAlumno());
         console.log(`Espacios disponibles: ${Salon.obtenerTotalAlumnos()}`);
         
@@ -58,9 +60,10 @@ for (contador1; contador1 >= 0; contador1--){
         alert("Cupo lleno");
     }  
 }
+
 console.log("Alumnos agregados");
 
 for (let i = 0; i < nombres.length; i++) {
-    console.log(`-${nombres[i]}`);
+    console.log(`- ${nombres[i]}`);
 }
 

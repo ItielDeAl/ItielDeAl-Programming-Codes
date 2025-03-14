@@ -66,10 +66,10 @@ const trabajador1 = new Trabajador(prompt("Ingrese horas trabajadas"),prompt("In
 console.log(trabajador1.mostrarPago());
 console.log(trabajador1.mostrarCosto());
 
-//En proceso aun no funciona el ciclo jajaja
 
 */
 
+//En proceso aun no funciona el ciclo jajaja
 // Clase 3
 
 class Comida{
@@ -81,9 +81,9 @@ class Comida{
 } 
 class Vegetariana extends Comida{
    constructor(nombre, cantidad, costo){
-    this.nombre = nombre;
-    super(cantidad);
-    super(costo);
+       super(cantidad);
+       super(costo);
+       this.nombre = nombre;
    } 
    mostrarVeg(){
     return`${this.nombre} = ${super.cantidad()}`
@@ -94,9 +94,9 @@ class Vegetariana extends Comida{
 }
 class Omnivoros extends Comida{
     constructor(nombre, cantidad){
-     this.nombre = nombre;
-     super(cantidad);
-     super(costo);
+        super(cantidad);
+        super(costo);
+        this.nombre = nombre;
     } 
     mostrarOmn(){
         return`${this.nombre} = ${super.cantidad()}`
@@ -110,27 +110,23 @@ let menu = [];
 
 
 while (continuar) {
-let operacion = promt("Menu sin inventarios, agregar comidas \n Vegetariana = 1 \n Omnivora = 2 \n Mostrar menu = 3 \n Salir = 4")
+let operacion = prompt("Menu sin inventarios, agregar comidas \n Vegetariana = 1 \n Omnivora = 2 \n Mostrar menu = 3 \n Salir = 4")
     switch (operacion) {
         case '1':
+            let espacios= prompt("Ingresa la cantidad de platillos")
             menu.push=("Vegetariano");
-            for (let i = prompt("Ingresa la cantidad de platillos"); i < espacios; i++) {
-                const platillo = new Vegetariana(
-                    prompt("Ingresa el nombre del platillo Vegetariano"),
-                    prompt("Ingresa la cantidad disponible"),
-                    prompt("Ingresa el costo")
+            for (let i = 0; i < espacios ; i++) {
+                const platillo = new Vegetariana(prompt("Ingresa el nombre del platillo Vegetariano"), prompt("Ingresa la cantidad disponible"), prompt("Ingresa el costo")
                 );
                 menu.push(platillo.mostrarVeg());
                 menu.push(platillo.mostrarcostoVeg());
             }
             break;
         case '2':
+            let espacios2= prompt("Ingresa la cantidad de platillos")
             menu.push("Omnivoro");
-            for (let i = prompt("Ingresa la cantidad de platillos"); i < espacios; i++) {
-                const platillo = new Omnivoros(
-                    prompt("Ingresa el nombre del platillo Omnivoro"),
-                    prompt("Ingresa la cantidad disponible"),
-                    prompt("Ingresa el costo")
+            for (let i = 0; i < espacios2; i++) {
+                const platillo = new Omnivoros(prompt("Ingresa el nombre del platillo Omnivoro"), prompt("Ingresa la cantidad disponible"), prompt("Ingresa el costo")
                 );
                 menu.push(platillo.mostrarOmn());
                 menu.push(platillo.mostrarcostoOmn());

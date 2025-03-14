@@ -1,4 +1,4 @@
-
+/*
 //Clase 1.
 
 class Boletos{
@@ -68,7 +68,7 @@ console.log(trabajador1.mostrarCosto());
 
 //En proceso aun no funciona el ciclo jajaja
 
-/*
+*/
 
 // Clase 3
 
@@ -105,53 +105,49 @@ class Omnivoros extends Comida{
         return `${this.nombre} = ${super.costo} por c/u`
        }
  }
- 
-let cantidad_platillos = prompt("Ingresa la cantidad de platillos (numero par)");
-let espacios =  (cantidad_platillos/2)
+let continuar = true;
 let menu = []; 
-menu.push=("Vegetariano");
 
-do {
-    // Add vegetarian dishes
-    for (let i = 1; i <= espacios; i++) {
-        const platillo = new Vegetariana(
-            prompt("Ingresa el nombre del platillo Vegetariano"),
-            prompt("Ingresa la cantidad disponible"),
-            prompt("Ingresa el costo")
-        );
-        menu.push(platillo.mostrarVeg());
-        menu.push(platillo.mostrarcostoVeg());
-    }
 
-    // Add omnivore section header
-    menu.push("Omnivoro");
-
-    // Add omnivore dishes
-    for (let i = 1; i <= espacios; i++) {
-        const platillo = new Omnivoros(
-            prompt("Ingresa el nombre del platillo Omnivoro"),
-            prompt("Ingresa la cantidad disponible"),
-            prompt("Ingresa el costo")
-        );
-        menu.push(platillo.mostrarOmn());
-        menu.push(platillo.mostrarcostoOmn());
-    }
-
-    let ver_menu = prompt("¿Consultar menu? (si/no)");
-
-    if (ver_menu.toLowerCase() === "si") {
-        alert("Menu");
+while (continuar) {
+let operacion = promt("Menu sin inventarios, agregar comidas \n Vegetariana = 1 \n Omnivora = 2 \n Mostrar menu = 3 \n Salir = 4")
+    switch (operacion) {
+        case '1':
+            menu.push=("Vegetariano");
+            for (let i = prompt("Ingresa la cantidad de platillos"); i < espacios; i++) {
+                const platillo = new Vegetariana(
+                    prompt("Ingresa el nombre del platillo Vegetariano"),
+                    prompt("Ingresa la cantidad disponible"),
+                    prompt("Ingresa el costo")
+                );
+                menu.push(platillo.mostrarVeg());
+                menu.push(platillo.mostrarcostoVeg());
+            }
+            break;
+        case '2':
+            menu.push("Omnivoro");
+            for (let i = prompt("Ingresa la cantidad de platillos"); i < espacios; i++) {
+                const platillo = new Omnivoros(
+                    prompt("Ingresa el nombre del platillo Omnivoro"),
+                    prompt("Ingresa la cantidad disponible"),
+                    prompt("Ingresa el costo")
+                );
+                menu.push(platillo.mostrarOmn());
+                menu.push(platillo.mostrarcostoOmn());
+            }
+        
+            break;
+        case '3':
+            alert("Menu");
         menu.forEach(comida => {
             alert(comida);
         });
-    } else {
-        alert("Gracias");
+        case '4':
+            continuar = false;
+            alert("Movimientos terminados");
+            default:
+            alert('Accion invalida, Ingrese nueva accion')
+            break;
     }
 
-    const continuar = prompt("¿Desea agregar más platillos? (si/no)");
-    if (continuar.toLowerCase() !== "si") {
-        break;
-    }
-    
-} while (true);
-*/
+}

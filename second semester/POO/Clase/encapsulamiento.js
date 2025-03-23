@@ -1,3 +1,4 @@
+
 class CuentaBancaria {
     constructor(saldoInicial) {
         let saldo = saldoInicial; // saldo es privado

@@ -59,7 +59,7 @@ class Trabajador extends CostoHora{
     }
     mostrarPago(){
         return `${this.nombre}\n ${super.tiempoTrabajado()}\n ${super.costoCalculado()}`;
-    }
+        }
 }
 
 const trabajador1 = new Trabajador(prompt("Ingrese horas trabajadas"),prompt("Ingrese minutos trabajados"),prompt("Ingrese costo por hora en pesos $"),prompt("Ingrese nombre de trabajador"));
@@ -69,8 +69,9 @@ console.log(trabajador1.mostrarCosto());
 
 */
 
-//En proceso aun no funciona el ciclo jajaja
+//En proceso,no imprime la mitad.
 // Clase 3
+
 
 class Comida{
     constructor(cantidad,costo){
@@ -81,66 +82,61 @@ class Comida{
 } 
 class Vegetariana extends Comida{
    constructor(nombre, cantidad, costo){
-       super(cantidad);
-       super(costo);
+       super(cantidad, costo);
        this.nombre = nombre;
-   } 
+    } 
    mostrarVeg(){
-    return`${this.nombre} = ${super.cantidad()}`
+    return`${this.nombre} = ${super.cantidad}`
    }
    mostrarcostoVeg(){
     return `${this.nombre} = ${super.costo} por c/u`
    }
 }
+
 class Omnivoros extends Comida{
-    constructor(nombre, cantidad){
-        super(cantidad);
-        super(costo);
-        this.nombre = nombre;
+    constructor(nombreo, cantidad, costo){
+        super(cantidad, costo);
+        this.nombreo = nombreo;
     } 
     mostrarOmn(){
-        return`${this.nombre} = ${super.cantidad()}`
+        return`${this.nombreo} = ${super.cantidad}`
     }
     mostrarcostoOmn(){
-        return `${this.nombre} = ${super.costo} por c/u`
-       }
- }
+        return `${this.nombreo} = ${super.costo} por c/u`
+    }
+}
 let continuar = true;
-let menu = []; 
-
 
 while (continuar) {
-let operacion = prompt("Menu sin inventarios, agregar comidas \n Vegetariana = 1 \n Omnivora = 2 \n Mostrar menu = 3 \n Salir = 4")
-    switch (operacion) {
-        case '1':
-            let espacios= prompt("Ingresa la cantidad de platillos")
-            menu.push=("Vegetariano");
-            for (let i = 0; i < espacios ; i++) {
-                const platillo = new Vegetariana(prompt("Ingresa el nombre del platillo Vegetariano"), prompt("Ingresa la cantidad disponible"), prompt("Ingresa el costo")
-                );
-                menu.push(platillo.mostrarVeg());
-                menu.push(platillo.mostrarcostoVeg());
+let operacion = prompt("Menu sin inventarios, agregar comidas \n Vegetariana = 1 \n Omnivora = 2 \n Salir = 3")
+
+switch (operacion) {
+    case '1':
+        let espacios= prompt("Ingresa la cantidad de platillos")
+            console.log("Vegetariano");
+            
+            for (let i = 1; i <= espacios ; i++) {
+                const platillo = new Vegetariana(prompt("Ingresa el nombre del platillo Vegetariano"), String(prompt("Ingresa la cantidad disponible")), String(prompt("Ingresa el costo")));
+               console.log(platillo.mostrarVeg(), platillo.mostrarcostoVeg());
             }
-            break;
-        case '2':
+
+            break;  
+
+            case '2':
             let espacios2= prompt("Ingresa la cantidad de platillos")
-            menu.push("Omnivoro");
-            for (let i = 0; i < espacios2; i++) {
-                const platillo = new Omnivoros(prompt("Ingresa el nombre del platillo Omnivoro"), prompt("Ingresa la cantidad disponible"), prompt("Ingresa el costo")
-                );
-                menu.push(platillo.mostrarOmn());
-                menu.push(platillo.mostrarcostoOmn());
+            console.log("Omnivoro");
+            for (let i = 1; i <= espacios2; i++) {
+                const platillo1 = new Omnivoros(prompt("Ingresa el nombre del platillo Omnivoro"), String(prompt("Ingresa la cantidad disponible")), String(prompt("Ingresa el costo")));
+                console.log(platillo1.mostrarOmn()  , platillo1.mostrarcostoOmn());
             }
         
             break;
+
         case '3':
-            alert("Menu");
-        menu.forEach(comida => {
-            alert(comida);
-        });
-        case '4':
             continuar = false;
             alert("Movimientos terminados");
+            break;
+
             default:
             alert('Accion invalida, Ingrese nueva accion')
             break;

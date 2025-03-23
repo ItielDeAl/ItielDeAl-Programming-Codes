@@ -48,7 +48,7 @@ function decimalBinario(dc){
     }
 }
 while (continuar) {
-let operacion = prompt("Ingrese la acción a realizar: \n1=convertir binario a decimal \n2= decimal a binario \n3=suma de binarios \n4=resta de binarios \n5=multiplicacion de binarios \n6=division de binarios \n7= terminar  ")    
+let operacion = prompt("Ingrese la acción a realizar:   1=convertir binario a decimal \n2= decimal a binario \n3=suma de binarios \n4=resta de binarios \n5=multiplicacion de binarios \n6=division de binarios \n7= terminar  ")    
     switch (operacion) {
         //Binario a decimal
         case '1': 

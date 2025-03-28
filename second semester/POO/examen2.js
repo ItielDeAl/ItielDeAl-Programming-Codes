@@ -48,12 +48,13 @@ class Libro {
         if (!titulo || titulo.trim() === '') {
             throw new Error("El título no puede estar vacío");
         }
-        this.#titulo = titulo.trim();
+        this.#titulo = titulo.trim();  //.trm elimina los espacios en blanco
     }
 
     setIsbn(isbn) {
         if (!isbn || isbn.trim() === '') {
-            throw new Error("El ISBN no puede estar vacío");
+            throw new Error("El ISBN no puede estar vacío"); 
+            //Interrumpe el flujo y marca el error.
         }
         this.#isbn = isbn.trim();
     }
@@ -111,14 +112,17 @@ class Biblioteca {
         return this.#listaLibros.map(libro => libro.mostrarLibro()).join('\n');
         //.join es el separador.
     }
-    //index 
+    //index almacena la posición, 
     borrarLibro(titulo) {
         const index = this.#listaLibros.findIndex(libro => libro.getTitulo() === titulo);
+        // findIndex busca el arreglo y devuelve el primer indice donde se cumple la condición
         if (index === -1) {
+         //si no encontro la palabra el index sera -1
             throw new Error("Libro no encontrado");
         }
+        //.splice elimina el indice
         this.#listaLibros.splice(index, 1);
-    }
+    } 
 
     contarLibros() {
         return this.#listaLibros.length;
@@ -129,6 +133,7 @@ class Biblioteca {
 const biblioteca = new Biblioteca();
 
 function agregarLibroOArticulo(esArticulo = false) {
+//controlar errores, si ocurre un error dentro del try, se ejecutara el catch   
     try {
         const titulo = prompt("Ingrese el título:");
         const isbn = prompt("Ingrese el ISBN:");
@@ -148,7 +153,7 @@ function agregarLibroOArticulo(esArticulo = false) {
         biblioteca.agregarLibro(elemento);
         console.log("Elemento agregado exitosamente");
     } catch (error) {
-        console.error("Error:", error.message);
+        console.error("Error:", error.message);//error.message imprime el error.
     }
 }
 

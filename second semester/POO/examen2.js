@@ -71,7 +71,7 @@ class Libro {
     }
 
     mostrarLibro() {
-        return `Título: ${this.#titulo}, ISBN: ${this.#isbn}, Autor: ${this.#autor.mostrarAutor()}`;
+        return `Título: ${this.#titulo}\n ISBN: ${this.#isbn}\n Autor: ${this.#autor.mostrarAutor()}`;
     }
 }
 
@@ -91,7 +91,7 @@ class Articulo extends Libro {
     }
 
     mostrarLibro() {
-        return `${super.mostrarLibro()}, Revista: ${this.#nombreRevista}`;
+        return `${super.mostrarLibro()}\n Revista: ${this.#nombreRevista}`;
     }
 }
 

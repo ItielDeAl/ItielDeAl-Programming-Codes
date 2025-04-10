@@ -8,7 +8,7 @@ class Forma{
     }
     //Este metodo debe ser implementado por cualquier subclase, si no se lanzara un error
     area(){
-        throw new Error("El metodo abstracto 'area' debe ser implemnetado")
+        throw new Error("El metodo abstracto 'area' debe ser implementado")
     }
 }
 

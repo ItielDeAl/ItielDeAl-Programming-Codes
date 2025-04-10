@@ -1,4 +1,4 @@
-//Ejemplo de int
+//Ejemplo de interfas
 
 //definimos el objeto ue simula la interfaz
 const FormaInterfas = {

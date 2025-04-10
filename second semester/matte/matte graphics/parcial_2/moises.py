@@ -88,7 +88,7 @@ y = sp.sympify(input("Ingresa la función f(x): "))
 derivada = sp.diff(y, x)
 
 
-def newton_raphson(x0, tolerancia = 1e-6, max_iter = 100, error_absoluto = float('inf')):
+def newton_raphson(x0, tolerancia = 1e-6, max_iter = 30, error_absoluto = float('inf')):
     iteraciones = 0 # Inicializar el contador de iteraciones
 
     #mietras el error absoluto sea mayor que la tolerancia y el número de iteraciones no supere el máximo

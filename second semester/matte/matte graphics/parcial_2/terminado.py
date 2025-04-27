@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 # Variable simbólica
 x = sp.Symbol('x')
 
-def newton_raphson(x0, y, derivada, tolerancia=1e-6, max_iter = 50):
+def newton_raphson(x0, y, derivada, tolerancia=1e-6, max_iter = 30):
     iteraciones = 0
     error_absoluto = float('inf')
     resultados = []

@@ -4,10 +4,10 @@ import sympy as sp
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Definir variable simbólica
+# Variable simbólica
 x = sp.Symbol('x')
 
-def newton_raphson(x0, y, derivada, tolerancia=1e-6, max_iter=30):
+def newton_raphson(x0, y, derivada, tolerancia=1e-6, max_iter = 30):
     iteraciones = 0
     error_absoluto = float('inf')
     resultados = []
@@ -20,7 +20,6 @@ def newton_raphson(x0, y, derivada, tolerancia=1e-6, max_iter=30):
             x0 = x1
             iteraciones += 1
             
-            # Check if root is found
             if abs(y.subs(x, x1)) < tolerancia:
                 break
                 
@@ -30,22 +29,20 @@ def newton_raphson(x0, y, derivada, tolerancia=1e-6, max_iter=30):
     return resultados, x0, iteraciones
 
 def plot_function(y, x_points):
-    # Create a new figure window
     plt.figure(figsize=(8, 6))
     
-    # Convert sympy expression to numpy function
     f = sp.lambdify(x, y, 'numpy')
     
-    # Generate x values for plotting
+    # Generar valores de x para graficar
     x_min = min(x_points) - 2
     x_max = max(x_points) + 2
     x_vals = np.linspace(x_min, x_max, 1000)
     y_vals = f(x_vals)
     
-    # Plot function
+    # Graficar la función
     plt.plot(x_vals, y_vals, 'r-', label='f(x)')
     
-    # Plot iteration points
+    # Graficar puntos de iteración
     y_points = [float(y.subs(x, xi)) for xi in x_points]
     plt.plot(x_points, y_points, 'bo', label='Iteraciones')
     
@@ -57,7 +54,7 @@ def plot_function(y, x_points):
     plt.xlabel('x')
     plt.ylabel('f(x)')
     
-    # Show the plot in a new window
+    # Mostrar la gráfica en una nueva ventana
     plt.show(block=False)
 
 def calcular():
@@ -83,13 +80,13 @@ def calcular():
             texto_resultados.insert(tk.END, "i\tRi\tRi+1\tError\n")
             texto_resultados.insert(tk.END, "-" * 50 + "\n")
             
-            # Collect x points for plotting
+            # Recopilar puntos de x para graficar
             x_points = []
             for i, r0, r1, error in resultados:
                 texto_resultados.insert(tk.END, f"{i}\t{r0:.6f}\t{r1:.6f}\t{error:.6f}\n")
                 x_points.extend([r0, r1])
             
-            # Plot function and points in a new window
+            # Graficar función y puntos en una nueva ventana
             plot_function(y, x_points)
             
             # Mostrar mensaje con iteraciones y raíz aproximada
@@ -125,7 +122,7 @@ tk.Label(frame_entrada, text="Margen de error:").grid(row=2, column=0, padx=5, p
 entrada_error = tk.Entry(frame_entrada, width=30)
 entrada_error.grid(row=2, column=1, padx=5, pady=5)
 
-# Boton de calcular
+# Botón de calcular
 frame_botones = tk.Frame(ventana)
 frame_botones.pack(pady=10)
 

@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import messagebox
 import sympy as sp
+import numpy as np
+import matplotlib.pyplot as plt
 
 # Definir variable simbólica
 x = sp.Symbol('x')
@@ -27,6 +29,37 @@ def newton_raphson(x0, y, derivada, tolerancia=1e-6, max_iter=30):
 
     return resultados, x0, iteraciones
 
+def plot_function(y, x_points):
+    # Create a new figure window
+    plt.figure(figsize=(8, 6))
+    
+    # Convert sympy expression to numpy function
+    f = sp.lambdify(x, y, 'numpy')
+    
+    # Generate x values for plotting
+    x_min = min(x_points) - 2
+    x_max = max(x_points) + 2
+    x_vals = np.linspace(x_min, x_max, 1000)
+    y_vals = f(x_vals)
+    
+    # Plot function
+    plt.plot(x_vals, y_vals, 'r-', label='f(x)')
+    
+    # Plot iteration points
+    y_points = [float(y.subs(x, xi)) for xi in x_points]
+    plt.plot(x_points, y_points, 'bo', label='Iteraciones')
+    
+    plt.axhline(0, color='black', lw=0.5, ls='--')  # Línea horizontal en y=0
+    plt.axvline(0, color='black', lw=0.5, ls='--')  # Línea vertical en x=0
+    plt.grid(True)
+    plt.legend()
+    plt.title('Gráfica de la función y puntos de iteración')
+    plt.xlabel('x')
+    plt.ylabel('f(x)')
+    
+    # Show the plot in a new window
+    plt.show(block=False)
+
 def calcular():
     try:
         # Obtener valores de entrada
@@ -49,8 +82,15 @@ def calcular():
             # Mostrar resultados en formato de tabla
             texto_resultados.insert(tk.END, "i\tRi\tRi+1\tError\n")
             texto_resultados.insert(tk.END, "-" * 50 + "\n")
+            
+            # Collect x points for plotting
+            x_points = []
             for i, r0, r1, error in resultados:
                 texto_resultados.insert(tk.END, f"{i}\t{r0:.6f}\t{r1:.6f}\t{error:.6f}\n")
+                x_points.extend([r0, r1])
+            
+            # Plot function and points in a new window
+            plot_function(y, x_points)
             
             # Mostrar mensaje con iteraciones y raíz aproximada
             messagebox.showinfo("Resultado Final", 
@@ -66,7 +106,7 @@ def calcular():
 # Crear ventana principal
 ventana = tk.Tk()
 ventana.title("Método de Newton-Raphson")
-ventana.geometry("600x500")
+ventana.geometry("600x600")
 
 # Crear marco de entrada
 frame_entrada = tk.Frame(ventana)

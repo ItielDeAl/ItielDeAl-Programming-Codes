@@ -78,7 +78,7 @@ function generateRandomArray(size) {
 }
 
 // Definir el tamaño del arreglo aquí
-const size = 1; // Cambia este valor según sea necesario
+const size = 150000; // Cambia este valor según sea necesario
 
 // Generar el arreglo aleatorio
 const array = generateRandomArray(size);

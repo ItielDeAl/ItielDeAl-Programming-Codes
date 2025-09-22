@@ -62,19 +62,33 @@ def graficar():
     ejes = figura.add_subplot(111)
     ejes.plot(x_plot, y_plot, label=f'f(x) = {y}', color='blue')
 
+    
+    # Convertir la función simbólica a una función numérica
+    # Usar sp.lambdify para crear una función rápida y numérica
+    f_numerica = sp.lambdify(x, f, 'numpy')
+
+    # Crear un rango de x para el sombreado, limitado por a y b
+    x_fill = np.linspace(a, b, 200) # Más puntos para un sombreado suave
+    y_fill = f_numerica(x_fill) # Calcular los valores numéricos de y
+    
+    ejes.fill_between(x_fill, y_fill, color='burlywood', alpha=0.5, label='Área de integración')
+    
+
+
     # Graficar líneas verticales desde a hasta b
     for i in range(m + 1):
         x_line = a + i * h  # Calcular la posición x de la línea
-        ejes.axvline(x=x_line, color='grey', linewidth=1, ls='--')  # Dibujar la línea vertical
+        y_line = f.subs(x, x_line)  # Calcular el valor de la función en x_line
+        ejes.plot([x_line, x_line], [0, y_line], color='grey', linewidth=1, ls='--')  # Dibujar la línea vertical
 
     # Configuración de la gráfica
-    ejes.set_title('Gráfica de la función con líneas verticales')
+    ejes.set_title('Gráfica de la función')
     ejes.set_xlabel('x')
     ejes.set_ylabel('f(x)')
-    ejes.axhline(0, color='black', linewidth=0.5, ls='--')
-    ejes.axvline(0, color='black', linewidth=0.5, ls='--')
-    ejes.axvline(b, color='red', linewidth=1, ls='--', label='Límite superior b')
-    ejes.axvline(a, color='green', linewidth=1, ls='--', label='Límite inferior a')
+    ejes.axhline(0, color='black', linewidth=2)
+    ejes.axvline(0, color='black', linewidth=2)
+    ejes.axvline(b, color='red', linewidth=1.5, ls='--', label='Límite superior b')
+    ejes.axvline(a, color='green', linewidth=1.5, ls='--', label='Límite inferior a')
 
     ejes.grid()
     ejes.legend()
@@ -97,6 +111,7 @@ def borrar():
 ventana = tk.Tk()
 ventana.title("Integración Númerica")
 ventana.geometry("600x600")
+ventana.configure(bg='cadetblue')#cadetblue
 
 # Crear marco de entrada
 frame_entrada = tk.Frame(ventana)

@@ -125,7 +125,8 @@ frame_botones.pack(pady=10)
 
 tk.Button(frame_botones, text="Calcular", command=calcular, bg="white", fg="green").pack(side=tk.LEFT, padx=5)
 tk.Button(frame_botones, text="Graficar", command=graficar, bg="white", fg="blue").pack(side=tk.LEFT, padx=5)
-tk.Button(frame_botones, text="Borrar", command=borrar, bg="white", fg="red").pack(side=tk.LEFT, padx=5)
+tk.Button(frame_botones, text="Borrar", command=borrar, bg="white", fg="magenta").pack(side=tk.LEFT, padx=5)
+tk.Button(frame_botones, text="Salir", command=ventana.quit, bg="white", fg="red").pack(side=tk.LEFT, padx=5)
 
 # Cuadro de resultados
 texto_resultados = tk.Text(ventana, height=2, width=50)

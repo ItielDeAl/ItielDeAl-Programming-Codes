@@ -1,7 +1,7 @@
-import tkinter as tk
-import numpy as np
-import sympy as sp
-from matplotlib.figure import Figure
+import tkinter as tk    #Interfas (GUI)
+import numpy as np      #Arreglos numericos
+import sympy as sp      #Manipulación simbolica de la función
+from matplotlib.figure import Figure        #Grafica de la función
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 def calcular():

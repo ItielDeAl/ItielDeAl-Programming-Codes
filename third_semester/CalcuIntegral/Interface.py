@@ -5,137 +5,159 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 def calcular():
-    # Obtener valores de entrada
-    y = entrada_funcion.get()
-    a = float(inferior.get())
-    b = float(superior.get())
-    m = int(rectangulo.get())
-    x = sp.symbols('x')  # Definir la variable simbólica
-    f = sp.sympify(y)  # Convertir la entrada del usuario a una función simbólica
+    #Calcular la integral simbolica
+    try:
+        """
+        Valores ingresados por el usuario
+        se utilizan los get por que las ventanas lo dan 
+        en modo privado
+        """
+        y_str = entrada_funcion.get()
+        a = float(inferior.get())
+        b = float(superior.get())
+        m = int(rectangulo.get())
+        
+        # definir la variable y la función.
+        x = sp.symbols('x')
+        f = sp.sympify(y_str)
+        
+        # Calcular la integral simbolica
+        I = sp.integrate(f, (x, a, b))
+        integracion = I.evalf()
+        
+        # Cuadro de texto
+        texto_resultados.delete('1.0', tk.END)
+        texto_resultados.insert(tk.END, f"El valor de la integral simbólica es:\n {integracion}\n")
+        
+        # Calcular los intervalos
+        h = (b - a) / m
+        x_values = np.linspace(a, b, m + 1)
+        
+        # Funcion simbolica a numerica
+        f_numerica = sp.lambdify(x, f, 'numpy')
+        
+        integral = (h / 2) * (f_numerica(x_values[0]) + 2 * np.sum(f_numerica(x_values[1:-1])) + f_numerica(x_values[-1]))
+        
+        texto_resulta2.delete('1.0', tk.END)
+        texto_resulta2.insert(tk.END, f"El valor aproximado de la integral es:\n {integral}\n")
 
-    # Calcular la integral usando el método de integración simbólica
-    I = sp.integrate(f, (x, a, b))
-    Integracion = I.evalf()
-    print('El valor de la integral simbólica es:', Integracion)
-    texto_resultados.insert(tk.END, f"El valor de la integral simbólica es:\n {Integracion}\n")
-
-    # Cálculo del ancho del intervalo
-    h = (b - a) / m
-    # Crear los puntos x
-    x_values = np.linspace(a, b, m + 1)
-
-    # Inicializar la integral
-    integral = 0
-
-    # Calcular la integral usando el método del trapecio
-    for i in range(m):
-        desc = (x_values[i] + x_values[i + 1]) / 2
-        integral += f.subs(x, desc) * h
-
-    print('El valor aproximado de la integral es:', integral)
-    texto_resulta2.insert(tk.END, f"El valor aproximado de la integral es:\n {integral}\n")
+    except (ValueError, sp.SympifyError) as e:
+        #manejo de errores en la función
+        texto_resultados.delete('1.0', tk.END)
+        texto_resultados.insert(tk.END, f"Error en la entrada: {e}. Por favor, verifique los valores e ingrese una función válida.")
 
 def graficar():
-    y = entrada_funcion.get()
-    a = float(inferior.get())
-    b = float(superior.get())
-    m = int(rectangulo.get())
-    x = sp.symbols('x')  # Definir la variable simbólica
-    f = sp.sympify(y)  # Convertir la entrada del usuario a una función simbólica
+
+    #Graficar la funcion y area
     
-    # Cálculo del ancho del intervalo
-    h = (b - a) / m
-    # Crear los puntos x
-    x_values = np.linspace(a, b, m + 1)
+    try:
+        y_str = entrada_funcion.get()
+        a = float(inferior.get())
+        b = float(superior.get())
+        m = int(rectangulo.get())
+        
+        x = sp.symbols('x')
+        f = sp.sympify(y_str)
+        
+        # Calcular los intervalos
+        h = (b - a) / m
+        x_values = np.linspace(a, b, m + 1)
+        
+        # Borrar grafica anterior
+        for widget in frame_grafica.winfo_children():
+            widget.destroy()
 
-    # Graficar la función
-    # Crear un rango de valores para x para la gráfica
-    x_plot = np.linspace(a - 1, b + 1, 400)  # Rango extendido para mejor visualización
-    y_plot = [f.subs(x, val) for val in x_plot]
+        # Nueva grafica y ejes
+        figura = Figure(figsize=(10, 6), dpi=100)
+        ejes = figura.add_subplot(111)
 
-    # Limpiar el área de la gráfica antes de dibujar
-    for widget in frame_grafica.winfo_children():
-        widget.destroy()
+        # Función numerica a simbolica para graficar
+        f_numerica = sp.lambdify(x, f, 'numpy')
 
-    # Crear la figura y el lienzo
-    figura = Figure(figsize=(10, 6), dpi=100)
-    ejes = figura.add_subplot(111)
-    ejes.plot(x_plot, y_plot, label=f'f(x) = {y}', color='blue')
+        # Graficación de la curva
+        x_plot = np.linspace(a - 1, b + 1, 400)
+        y_plot = f_numerica(x_plot)
+        ejes.plot(x_plot, y_plot, label=f'f(x) = {y_str}', color='blue')
 
-    
-    # Convertir la función simbólica a una función numérica
-    # Usar sp.lambdify para crear una función rápida y numérica
-    f_numerica = sp.lambdify(x, f, 'numpy')
+        #Sombrear debajo de la función
+        x_fill = np.linspace(a, b, 200)
+        y_fill = f_numerica(x_fill)
+        ejes.fill_between(x_fill, y_fill, color='burlywood', alpha=0.5, label='Área de integración')
 
-    # Crear un rango de x para el sombreado, limitado por a y b
-    x_fill = np.linspace(a, b, 200) # Más puntos para un sombreado suave
-    y_fill = f_numerica(x_fill) # Calcular los valores numéricos de y
-    
-    ejes.fill_between(x_fill, y_fill, color='burlywood', alpha=0.5, label='Área de integración')
-    
+        # Lineas verticales
+        # Graficar líneas verticales desde a hasta b
+        for i in range(m + 1):
+            x_line = a + i * h  # Calcular la posición x de la línea
+            y_line = f.subs(x, x_line)  # Calcular el valor de la función en x_line
+            ejes.plot([x_line, x_line], [0, y_line], color='grey', linewidth=1, ls='--')  # Dibujar la línea vertical
 
+        # Etiquetas y titulos
+        ejes.set_title('Gráfica de la función')
+        ejes.set_xlabel('x')
+        ejes.set_ylabel('f(x)')
+        
+        # ejes
+        ejes.axhline(0, color='black', linewidth=1.5)
+        ejes.axvline(0, color='black', linewidth=1.5)
+        
+        #Intervalo a y b
+        ejes.axvline(b, color='red', linewidth=1.5, ls='--', label='Límite superior b')
+        ejes.axvline(a, color='green', linewidth=1.5, ls='--', label='Límite inferior a')
+        
+        # cuadriculado
+        ejes.grid(True)
+        ejes.legend()
 
-    # Graficar líneas verticales desde a hasta b
-    for i in range(m + 1):
-        x_line = a + i * h  # Calcular la posición x de la línea
-        y_line = f.subs(x, x_line)  # Calcular el valor de la función en x_line
-        ejes.plot([x_line, x_line], [0, y_line], color='grey', linewidth=1, ls='--')  # Dibujar la línea vertical
+        # Mostrar el grafico en la ventana
+        canvas = FigureCanvasTkAgg(figura, master=frame_grafica)
+        canvas.draw()
+        canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
 
-    # Configuración de la gráfica
-    ejes.set_title('Gráfica de la función')
-    ejes.set_xlabel('x')
-    ejes.set_ylabel('f(x)')
-    ejes.axhline(0, color='black', linewidth=2)
-    ejes.axvline(0, color='black', linewidth=2)
-    ejes.axvline(b, color='red', linewidth=1.5, ls='--', label='Límite superior b')
-    ejes.axvline(a, color='green', linewidth=1.5, ls='--', label='Límite inferior a')
-
-    ejes.grid()
-    ejes.legend()
-
-    # Crear el lienzo para la figura y agregarlo al marco de la gráfica
-    canvas = FigureCanvasTkAgg(figura, master=frame_grafica)
-    canvas.draw()
-    canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
-
+    except (ValueError, sp.SympifyError) as e:
+        # Error al graficar
+        for widget in frame_grafica.winfo_children():
+            widget.destroy()
+        error_label = tk.Label(frame_grafica, text=f"Error al graficar: {e}\nPor favor, verifique la función y los límites.", fg="red", bg="white")
+        error_label.pack(pady=20)
+        
 def borrar():
-    # Limpiar los cuadros de texto
-    texto_resultados.delete(1.0, tk.END)
-    texto_resulta2.delete(1.0, tk.END)
-
-    # Limpiar el área de la gráfica
+    #eliminar los resultados calculados
+    texto_resultados.delete('1.0', tk.END)
+    texto_resulta2.delete('1.0', tk.END)
+    #eliminar grafica
     for widget in frame_grafica.winfo_children():
         widget.destroy()
+    
 
-# Crear ventana principal
+# Ventana principal
 ventana = tk.Tk()
 ventana.title("Integración Númerica")
 ventana.geometry("600x600")
-ventana.configure(bg='cadetblue')#cadetblue
+ventana.configure(bg='cadetblue')
 
-# Crear marco de entrada
-frame_entrada = tk.Frame(ventana)
+frame_entrada = tk.Frame(ventana, bg='cadetblue')
 frame_entrada.pack(pady=20)
 
-# Nombres y entradas
-tk.Label(frame_entrada, text="Función f(x):").grid(row=0, column=0, padx=5, pady=5)
+# Entradas
+tk.Label(frame_entrada, text="Función f(x):", bg='cadetblue').grid(row=0, column=0, padx=5, pady=5)
 entrada_funcion = tk.Entry(frame_entrada, width=30)
 entrada_funcion.grid(row=0, column=1, padx=5, pady=5)
+tk.Label(frame_entrada, text="Ejemplo: sin(x), exp(x), x**2 + 2*x", bg='cadetblue', font=("Arial", 8)).grid(row=0, column=2, padx=5, pady=5)
 
-tk.Label(frame_entrada, text="Límite inferior a:").grid(row=1, column=0, padx=5, pady=5)
+tk.Label(frame_entrada, text="Límite inferior a:", bg='cadetblue').grid(row=1, column=0, padx=5, pady=5)
 inferior = tk.Entry(frame_entrada, width=30)
 inferior.grid(row=1, column=1, padx=5, pady=5)
 
-tk.Label(frame_entrada, text="Límite superior b:").grid(row=2, column=0, padx=5, pady=5)
+tk.Label(frame_entrada, text="Límite superior b:", bg='cadetblue').grid(row=2, column=0, padx=5, pady=5)
 superior = tk.Entry(frame_entrada, width=30)
 superior.grid(row=2, column=1, padx=5, pady=5)
 
-tk.Label(frame_entrada, text="Número de rectángulos de x:").grid(row=3, column=0, padx=5, pady=5)
+tk.Label(frame_entrada, text="Número de rectángulos de x:", bg='cadetblue').grid(row=3, column=0, padx=5, pady=5)
 rectangulo = tk.Entry(frame_entrada, width=30)
 rectangulo.grid(row=3, column=1, padx=5, pady=5)
 
 # Botones
-frame_botones = tk.Frame(ventana)
+frame_botones = tk.Frame(ventana, bg='cadetblue')
 frame_botones.pack(pady=10)
 
 tk.Button(frame_botones, text="Calcular", command=calcular, bg="white", fg="green").pack(side=tk.LEFT, padx=5)
@@ -145,11 +167,11 @@ tk.Button(frame_botones, text="Salir", command=ventana.quit, bg="white", fg="red
 
 # Cuadro de resultados
 texto_resultados = tk.Text(ventana, height=2, width=50)
-texto_resultados.pack(pady=20)
+texto_resultados.pack(pady=10)
 texto_resulta2 = tk.Text(ventana, height=2, width=50)
-texto_resulta2.pack(pady=20)
+texto_resulta2.pack(pady=10)
 
-# Crear un marco para la gráfica
+# Marco de la ventana
 frame_grafica = tk.Frame(ventana)
 frame_grafica.pack(pady=20)
 

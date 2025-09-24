@@ -1,6 +1,6 @@
-import matplotlib.pyplot as plt
-import numpy as np
-import sympy as sp
+import matplotlib.pyplot as plt #Grafica de la función
+import numpy as np #Arreglos numericos
+import sympy as sp #Manipulación simbolica de la función
 
 # Solicitar la función al usuario
 y = input('Ingrese la función: ')

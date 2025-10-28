@@ -1,6 +1,8 @@
 const Stack = require("./stack/stack");
 const Queue = require("./queue/queue");
-
+const {SinglyLinkedList}  = require('./list/Simple/singly_linked_list')
+const {CircularLinkedList} = require('./list/circular/circular_linkend_list')
+const { DoubleLinkedList } = require('./list/doubles/double_linked_list')
 
 console.log('Sección I: Ejercicios de estructura de datos Pila------------------------------------\n');
 
@@ -335,14 +337,14 @@ class ListaRepartidores {
   insertRepartidor(repartidorData) {
     const newNode = new Node(repartidorData);
 
-    // Caso 1: La lista está vacía o el nuevo nodo debe ser la cabeza
+    //lista está o el nuevo nodo debe ser la cabeza
     if (!this.head || this.head.value.NSS > newNode.value.NSS) {
       newNode.next = this.head;
       this.head = newNode;
       return;
     }
 
-    // Caso 2: Insertar en medio o al final
+    // Insertar en medio o al final
     let current = this.head;
     while (current.next && current.next.value.NSS < newNode.value.NSS) {
       // Avanzamos hasta encontrar el lugar de inserción
@@ -360,7 +362,7 @@ class ListaRepartidores {
       result.push(current.value);
       current = current.next;
     }
-    // Usamos JSON.stringify para una salida bonita, similar al ejemplo
+    
     console.log(JSON.stringify(result, null, 2));
 }
 }
@@ -373,7 +375,7 @@ listaPrincipal.insertRepartidor({ NSS: 103, nombre: "Lucía", días: 5 });
 
 console.log("--- Lista Inicial ---");
 listaPrincipal.printList();
-// 2. Crear la cola del día y llenarla
+//Crear la cola del día y llenarla
 const colaDelDia = new Queue();
 // El 'value' en la cola será un objeto con los datos del día
 colaDelDia.enqueue({ nss: 102, entidad: "EmpresaX" });
@@ -412,3 +414,515 @@ while (!colaDelDia.isEmpty()) {
 // 5. Mostrar la lista final
 console.log("\n--- Lista Final Actualizada ---");
 listaPrincipal.printList();
+
+console.log('');
+
+console.log('Ejercicio 4 Simulación de Computadores con Colas Enlazadas-----------------');
+// funciones extras para ralizar la simulación
+function getTiempoUsoAleatorio() {
+  const min = 30;
+  const max = 55;
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+ //Convierte los minutos de simulación (0-600) a formato HH:MM (10:00-20:00).
+
+function formatoHora(minutosDesdeInicio) {
+  const horasBase = 10;
+  let horas = horasBase + Math.floor(minutosDesdeInicio / 60);
+  let minutos = minutosDesdeInicio % 60;
+
+  // Rellena con ceros si es necesario
+  return `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
+}
+
+//Crea y devuelve una Cola con todos los minutos de llegada programados
+//según las frecuencias especificadas.
+
+function generarColaLlegadas() {
+  const colaLlegadas = new Queue();
+  const MINUTOS_CAMBIO_FRECUENCIA = 120; // 2 horas (10:00 a 12:00)
+  const MINUTOS_FIN_SIMULACION = 600; // 10 horas (10:00 a 20:00)
+
+  let minutoLlegadaActual = 0; // Primera llegada a las 10:00
+  let frecuencia = 18; // Frecuencia inicial
+
+  // Primeras 2 horas (10:00 a 11:59)
+  while (minutoLlegadaActual < MINUTOS_CAMBIO_FRECUENCIA) {
+    colaLlegadas.enqueue(minutoLlegadaActual);
+    minutoLlegadaActual += frecuencia;
+  }
+
+  // Resto del día (12:00 a 20:00)
+  frecuencia = 15;
+  // 'minutoLlegadaActual' ya tiene el valor de la primera llegada post-12:00
+  while (minutoLlegadaActual <= MINUTOS_FIN_SIMULACION) {
+    colaLlegadas.enqueue(minutoLlegadaActual);
+    minutoLlegadaActual += frecuencia;
+  }
+
+  return colaLlegadas;
+}
+
+//implementaciooooooooooooooooooooooooon/////////////////////////////////
+
+function simularComputadores() {
+  const NUM_COMPUTADORES = 15;
+  const TOTAL_MINUTOS_SIMULACION = 600; // 10:00 a 20:00
+
+  //Arreglo para computadores. 0 = libre, >0 = minutos restantes.
+  //.fill() resmplaza cada uno de los computadores por un 0
+  let computadores = Array(NUM_COMPUTADORES).fill(0);
+
+  const colaLlegadas = generarColaLlegadas();
+  const colaEspera = new Queue();
+
+  console.log("--- Iniciando Simulación (10:00 a 20:00) ---");
+  console.log(`Total computadores disponibles: ${NUM_COMPUTADORES}\n`);
+
+  // Obtenemos la primera llegada
+  let proximaLlegada = colaLlegadas.dequeue();
+
+  // Simular minuto a minuto
+  for (let minutoActual = 0; minutoActual <= TOTAL_MINUTOS_SIMULACION; minutoActual++) {
+    const horaActual = formatoHora(minutoActual);
+
+    //Reducir tiempo y liberar computadores ---
+    for (let i = 0; i < NUM_COMPUTADORES; i++) {
+      if (computadores[i] > 0) {
+        computadores[i]--; // Reducir tiempo de uso
+
+        if (computadores[i] === 0) {
+          // Computador liberado
+          console.log(`${horaActual} [LIBERA] Computador ${i + 1} ha terminado su sesión.`);
+          
+        }
+      }
+    }
+
+    //Verificar si llega un alumno en este minuto ---
+    if (minutoActual === proximaLlegada) {
+      console.log(`${horaActual} [LLEGA] Un alumno llega.`);
+
+      // Buscar un computador libre
+      const indiceLibre = computadores.findIndex(tiempo => tiempo === 0);
+
+      if (indiceLibre !== -1) {
+
+        const tiempoAsignado = getTiempoUsoAleatorio();
+        computadores[indiceLibre] = tiempoAsignado;
+        console.log(`          -> [OCUPA] Alumno ocupa Computador ${indiceLibre + 1} por ${tiempoAsignado} minutos.`);
+      } else {
+        // (Regla principal: No hay computadores libres)
+        console.log(`          -> [RECHAZADO] Todos los ${NUM_COMPUTADORES} computadores están ocupados. El alumno se retira.`);
+        // (No se añade a la colaEspera)
+      }
+
+      // Preparar la siguiente llegada
+      proximaLlegada = colaLlegadas.dequeue();
+      if (proximaLlegada === null) {
+        proximaLlegada = -1; // Ya no hay más llegadas programadas
+      }
+    }
+  }
+  
+  console.log(`\n${formatoHora(TOTAL_MINUTOS_SIMULACION)} --- FIN DE LA SIMULACIÓN ---`);
+  const ocupadosAlFinal = computadores.filter(t => t > 0).length;
+  console.log(`Estado final: ${ocupadosAlFinal} computadores quedaron en uso.\n`);
+}
+
+// Ejecutar la simulación
+simularComputadores();
+
+console.log('Sección III: Ejercicios de estructura de datos Listas---------------------------------\n');
+console.log('Ejercicio 1 Gestión de Palabras con Lista Enlazada-------------------------');
+
+
+const fs = require('fs');
+
+// Nombres de los archivos
+const IN_FILE = 'palabras.txt';
+const OUT_FILE = 'palabras_salida.txt';
+
+
+ //Leer el archivo de entrada y cargar las palabras en la lista enlazada.
+
+function cargarPalabras(lista) {
+  console.log(`Regla 1: Leyendo palabras desde ${IN_FILE}...`);
+  try {
+    // Lee el contenido del archivo .readFileSync
+    const data = fs.readFileSync(IN_FILE, 'utf8');
+    
+    // Divide por cualquier espacio en blanco (espacios, saltos de línea, etc.)
+    // y filtra cadenas vacías que puedan resultar.
+    const palabras = data.split(/\s+/).filter(p => p.length > 0);
+    
+    // Inserta cada palabra en la lista
+    for (const palabra of palabras) {
+      lista.push(palabra); // 'push' añade al final, manteniendo el orden
+    }
+    console.log(`Palabras cargadas exitosamente.`);
+  } catch (error) {
+    console.error(`Error al leer el archivo ${IN_FILE}: ${error.message}`);
+    console.log('Se iniciará con una lista vacía.');
+  }
+}
+
+
+// Permitir eliminar palabras específicas.
+function borrarPalabra(lista, palabra) {
+  console.log(`Regla 3: Intentando borrar "${palabra}"...`);
+  // Convertimos a array para encontrar el índice fácilmente
+  const palabrasArray = lista.toArray();
+  const index = palabrasArray.indexOf(palabra);
+  
+  if (index !== -1) {
+    // Usamos tu método 'removeat' para eliminar por índice
+    lista.removeat(index); 
+    console.log(`Palabra "${palabra}" eliminada.`);
+    return true;
+  } else {
+    console.log(`Palabra "${palabra}" no encontrada.`);
+    return false;
+  }
+}
+
+
+//Escribir la lista completa en un archivo de salida.
+function guardarPalabras(lista) {
+  console.log(`\nRegla 4: Guardando lista final en ${OUT_FILE}...`);
+  try {
+    const palabrasArray = lista.toArray();
+    // Unimos las palabras con un solo espacio, como pide el ejemplo
+    const data = palabrasArray.join(' '); 
+    
+    fs.writeFileSync(OUT_FILE, data, 'utf8');
+    console.log(`Lista guardada exitosamente.`);
+  } catch (error) {
+    console.error(`Error al guardar el archivo ${OUT_FILE}: ${error.message}`);
+  }
+}
+
+
+
+//Función principal que ejecuta la simulación del ejercicio.
+function main() {
+  console.log('--- Iniciando Ejercicio 1: Gestión de Palabras ---');
+  
+  // Creamos la lista
+  const listaDePalabras = new SinglyLinkedList();
+  
+  //Cargar palabras
+  cargarPalabras(listaDePalabras);
+  console.log('Lista inicial:', listaDePalabras.toArray().join(' -> '));
+  
+  console.log('\n--- Realizando operaciones de ejemplo ---');
+
+  //Añadir: "sandía" al final 
+  const palabraNueva = 'sandía';
+
+  listaDePalabras.push(palabraNueva); 
+  console.log(`Regla 2: Añadida "${palabraNueva}" al final.`);
+  console.log('Lista tras añadir:', listaDePalabras.toArray().join(' -> '));
+  
+  //Borrar: "pera"
+  const palabraABorrar = 'pera';
+  borrarPalabra(listaDePalabras, palabraABorrar);
+  console.log('Lista tras borrar:', listaDePalabras.toArray().join(' -> '));
+
+  //Guardar la lista final en el archivo
+  guardarPalabras(listaDePalabras);
+
+  // Verificación final
+  console.log('\n--- Proceso completado ---');
+  //Escribir en el documento.
+  const resultadoFinal = fs.readFileSync(OUT_FILE, 'utf8');
+  console.log(`Contenido de ${OUT_FILE}: ${resultadoFinal}`);
+}
+
+// Ejecutar el programa
+main();
+
+console.log('');
+
+console.log('Ejercicio 2 Representación de Polinomios con Lista Enlazada-------------------------');
+
+function parseTerm(term) {
+  let coef = 0;
+  let exp = 0;
+
+  if (!term.includes('x')) {
+    // Término constante 
+    coef = parseFloat(term);
+    exp = 0;
+  } else if (term.includes('x^')) {
+    // Término con exponente 
+    const parts = term.split('x^');
+    if (parts[0] === '' || parts[0] === '+') coef = 1;
+    else if (parts[0] === '-') coef = -1;
+    else coef = parseFloat(parts[0]);
+    exp = parseInt(parts[1]);
+  } else {
+    // Término linear
+    const parts = term.split('x');
+    if (parts[0] === '' || parts[0] === '+') coef = 1;
+    else if (parts[0] === '-') coef = -1;
+    else coef = parseFloat(parts[0]);
+    exp = 1;
+  }
+  return { coef, exp };
+}
+
+
+function printSinglyList(list) {
+  let str = "";
+  let curr = list.head; 
+  while (curr) {
+    const { coef, exp } = curr.value;
+    str += `[${coef} | ${exp}] -> `;
+    curr = curr.next;
+  }
+  str += "NULL";
+  console.log(str);
+}
+
+
+function evaluateSinglyList(list, x) {
+  let total = 0;
+  let curr = list.head; 
+  while (curr) {
+    const { coef, exp } = curr.value;
+    total += coef * Math.pow(x, exp);
+    curr = curr.next;
+  }
+  return total;
+}
+
+function evapoly(polyString) {
+  console.log(`Polinomio: ${polyString}\n`);
+  
+  const list = new SinglyLinkedList(); 
+
+  let normalizedPoly = polyString.replace(/\s/g, '');
+  normalizedPoly = normalizedPoly.replace(/-/g, '+-');
+  if (normalizedPoly.startsWith('+-')) {
+    normalizedPoly = normalizedPoly.substring(1);
+  }
+  const terms = normalizedPoly.split('+').filter(t => t.length > 0);
+
+  for (const term of terms) {
+    const { coef, exp } = parseTerm(term);
+    list.push({ coef, exp }); 
+  }
+
+  console.log("Lista enlazada:");
+ 
+  printSinglyList(list); 
+  
+  console.log("\nSalida de evaluación:");
+  for (let x = 0.0; x <= 5.0; x += 0.5) {
+    // --- ACTUALIZADO ---
+    const result = evaluateSinglyList(list, x); // Llama a la versión simple
+    console.log(`x=${x.toFixed(1)} -> ${result}`);
+  }
+}
+
+evapoly('3x^4 - 4x^2 + 11');
+
+console.log('');
+
+console.log('Ejercicio 3 Lista Circular de Polinomio---------------------------------------------');
+
+// --- RENOMBRADA ---
+function printCircularList(list) {
+  let str = "";
+  if (!list.tail) {
+    str = "NULL";
+    console.log(str);
+    return;
+  }
+  let curr = list.tail.next; 
+  do {
+    const { coef, exp } = curr.value;
+    str += `[${coef} | ${exp}] -> `;
+    curr = curr.next;
+  } while (curr !== list.tail.next); 
+
+  str += "NULL";
+  console.log(str);
+}
+
+
+function evaluateCircularList(list, x) {
+  if (!list.tail) return 0;
+  let total = 0;
+  let curr = list.tail.next; 
+  do {
+    const { coef, exp } = curr.value;
+    total += coef * Math.pow(x, exp);
+    curr = curr.next;
+  } while (curr !== list.tail.next);
+
+  return total;
+}
+
+function evapolyCir(polyString) {
+  if (typeof polyString !== 'string' || polyString.trim().length === 0) {
+    console.error("Error: La función 'main' fue llamada sin un polinomio.");
+    console.error("Uso correcto: main('3x^4 - 4x^2 + 11')");
+    return;
+  }
+  console.log(`Polinomio: ${polyString}\n`);
+  
+  const list = new CircularLinkedList(); 
+
+  let normalizedPoly = polyString.replace(/\s/g, '');
+  normalizedPoly = normalizedPoly.replace(/-/g, '+-');
+  if (normalizedPoly.startsWith('+-')) {
+    normalizedPoly = normalizedPoly.substring(1);
+  }
+  const terms = normalizedPoly.split('+').filter(t => t.length > 0);
+
+  for (const term of terms) {
+    const { coef, exp } = parseTerm(term);
+    list.insert({ coef, exp });
+  }
+
+  console.log("Lista enlazada:");
+
+  printCircularList(list); // Llama a la versión circular
+  
+  console.log("\nSalida de evaluación:");
+  for (let x = 0.0; x <= 5.0; x += 0.5) {
+  
+    const result = evaluateCircularList(list, x); // Llama a la versión circular
+    console.log(`x=${x.toFixed(1)} -> ${result}`);
+  }
+}
+
+evapolyCir('3x^4 - 4x^2 + 11');
+
+console.log('');
+
+console.log('Ejercicio 4 Gestión de Pasajeros con listas doblemente enlazada---------------------');
+
+const prompt = require("prompt-sync")();
+
+class PassengerManager {
+  constructor() {
+    this.passengerList = new DoubleLinkedList();
+  }
+
+  showMenu() {
+    console.log("\n--- MENÚ GESTIÓN DE PASAJEROS ---");
+    console.log("1. Insertar pasajero (al final)");
+    console.log("2. Visualizar pasajero");
+    console.log("3. Eliminar pasajero");
+    console.log("4. Mostrar lista de pasajeros");
+    console.log("5. Salir");
+    return prompt("Seleccione una opción: ");
+  }
+
+  // Opción 1: Insertar
+  insertPassenger() {
+    const nombre = prompt("Ingrese nombre del pasajero: ");
+    const vuelo = prompt("Ingrese número de vuelo: ");
+    const asiento = prompt("Ingrese asiento: ");
+
+    // El 'value' del nodo será un objeto con los datos del pasajero
+    const passengerData = { nombre, vuelo, asiento };
+    this.passengerList.push(passengerData);
+    
+    console.log("✅ Pasajero agregado correctamente.");
+  }
+
+  // Opción 2: Visualizar
+  viewPassenger() {
+    const num = parseInt(prompt("Ingrese el número de pasajero a visualizar (ej: 1): "));
+    if (isNaN(num) || num <= 0) {
+      console.log("Número inválido.");
+      return;
+    }
+
+    // Convertimos el número (1-based) a índice (0-based)
+    const index = num - 1;
+    const node = this.passengerList.get(index);
+
+    if (node) {
+      const p = node.value;
+      console.log(`\n--- Datos del Pasajero ${num} ---`);
+      console.log(`  Nombre: ${p.nombre}`);
+      console.log(`  Vuelo: ${p.vuelo}`);
+      console.log(`  Asiento: ${p.asiento}`);
+    } else {
+      console.log("Error: Pasajero no encontrado.");
+    }
+  }
+
+  // Opción 3: Eliminar
+  deletePassenger() {
+    const num = parseInt(prompt("Ingrese el número de pasajero a eliminar (ej: 1): "));
+    if (isNaN(num) || num <= 0) {
+      console.log("Número inválido.");
+      return;
+    }
+
+    // Convertimos a índice (0-based)
+    const index = num - 1;
+    const removedNode = this.passengerList.removeAt(index);
+
+    if (removedNode) {
+      console.log(`✅ Pasajero "${removedNode.value.nombre}" eliminado correctamente.`);
+    } else {
+      console.log("Error: Pasajero no encontrado.");
+    }
+  }
+
+  // Opción 4: Mostrar Lista
+  showAllPassengers() {
+    const list = this.passengerList.toArrayForward();
+    
+    if (list.length === 0) {
+      console.log("\nLa lista de pasajeros está vacía.");
+      return;
+    }
+
+    console.log("\n--- Lista de pasajeros (del primero al último) ---");
+    list.forEach((p, index) => {
+      // (index + 1) para mostrar una lista 1-based
+      console.log(`${index + 1}. ${p.nombre}, Vuelo ${p.vuelo}, Asiento ${p.asiento}`);
+    });
+  }
+
+  // Iniciar la aplicación
+  run() {
+    let running = true;
+    while (running) {
+      const option = this.showMenu();
+      switch (option) {
+        case "1":
+          this.insertPassenger();
+          break;
+        case "2":
+          this.viewPassenger();
+          break;
+        case "3":
+          this.deletePassenger();
+          break;
+        case "4":
+          this.showAllPassengers();
+          break;
+        case "5":
+          running = false;
+          console.log("Saliendo del sistema...");
+          break;
+        default:
+          console.log("Opción no válida. Intente de nuevo.");
+      }
+    }
+  }
+}
+
+// Ejecutar la aplicación
+const app = new PassengerManager();
+app.run();

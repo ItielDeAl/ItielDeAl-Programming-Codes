@@ -22,7 +22,7 @@ class DoubleLinkedList {
     this.length++;
   }
 
-  unshitf(value) {
+  unshift(value) {
     const node = new DNode(value);
     if (!this.head) {
       this.head = node;
@@ -48,6 +48,8 @@ class DoubleLinkedList {
 
   removeAt(index) {
     if (index < 0 || index >= this.length) return null;
+
+    //Eliminando la cabeza
     if (index === 0) {
       const remove = this.head;
       this.head = this.head.next;
@@ -56,11 +58,17 @@ class DoubleLinkedList {
       } else {
         this.tail = null;
       }
+      remove.next = null; 
       this.length--;
+      return remove;
     }
+
+    //Eliminando la cola
     if (index === this.length - 1) return this.pop();
-    //buscar desde head o tail segun nos cnvenga
+
+    //Eliminando en medio
     let current;
+    // Buscar el nodo
     if (index < this.length / 2) {
       current = this.head;
       for (let i = 0; i < index; i++) {
@@ -71,12 +79,16 @@ class DoubleLinkedList {
       for (let i = this.length - 1; i > index; i--) {
         current = current.prev;
       }
-      current.prev.next = current.next;
-      current.next.prev = current.prev;
-      current.next = current.prev = null;
-      this.length--;
-      return current;
     }
+    current.prev.next = current.next;
+    current.next.prev = current.prev;
+
+    // Limpiar punteros del nodo eliminado
+    current.next = null;
+    current.prev = null;
+
+    this.length--;
+    return current;
   }
 
   toArrayForward() {

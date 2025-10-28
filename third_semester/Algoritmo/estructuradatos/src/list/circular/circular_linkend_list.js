@@ -46,3 +46,4 @@ class CircularLinkedList {
     return out;
   }
 }
+module.exports = { CircularLinkedList };

@@ -82,7 +82,7 @@ function postfija(str) {
 console.log(postfija('2 3 + 2 *'));
 
 /////////////////////////////////////////////////////Convertir una Infija a postfija.
-// --- NECESITAS UNA FUNCIÓN DE AYUDA ---
+
 // No podemos evitarlo, necesitamos saber la "fuerza" (precedencia)
 console.log('Ejercicio 2 Convertir infija a postfija------------------------------------');
 

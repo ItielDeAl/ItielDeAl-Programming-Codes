@@ -82,9 +82,9 @@ function postfija(str) {
 console.log(postfija('2 3 + 2 *'));
 
 /////////////////////////////////////////////////////Convertir una Infija a postfija.
-
-// No podemos evitarlo, necesitamos saber la "fuerza" (precedencia)
 console.log('Ejercicio 2 Convertir infija a postfija------------------------------------');
+
+// saber la "fuerza" (precedencia)
 
 function precedencia(op) {
   if (op === '*' || op === '/') {

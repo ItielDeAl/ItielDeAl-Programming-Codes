@@ -74,6 +74,62 @@ class SinglyLinkedList {
     }
     return out;
   }
+  insert(index, value) {
+    // índice fuera de rango
+    if (index < 0 || index > this.length) return false;
+
+    // push si es al final
+    if (index === this.length) {
+      this.push(value);
+      return true;
+    }
+
+    //unshift si es al inicio
+    if (index === 0) {
+      this.unshift(value);
+      return true;
+    }
+
+    //insertar en medio
+    const node = new Node(value);
+    let prev = this.head;
+    
+    // Iterar para encontrar el nodo
+    for (let i = 0; i < index - 1; i++) {
+      prev = prev.next;
+    }
+    const temp = prev.next; 
+    // Apuntar 'prev' al nuevo nodo
+    prev.next = node;
+    // Apuntar el nuevo nodo al resto de la lista
+    node.next = temp;
+    this.length++;
+    return true;
+  }
+
+  pop() {
+    // Lista vacía
+    if (this.length === 0) return null;
+    let curr = this.head;
+    let prev = null; // Guardará el penúltimo nodo
+
+    // Iteramos hasta que 'curr' sea el último nodo (la cola)
+    while (curr.next) {
+      prev = curr;
+      curr = curr.next;
+    }
+    //Lista con un solo elemento
+    if (!prev) {
+      this.head = null;
+      this.tail = null;
+    } else {
+    //Lista con > 1 elemento
+      prev.next = null; // Cortar el enlace al último nodo
+      this.tail = prev;  // Actualizar la cola para que sea el penúltimo
+    }
+    this.length--;
+    return curr; // Devolver el nodo eliminado
+  }
 }
 
 module.exports = { SinglyLinkedList };

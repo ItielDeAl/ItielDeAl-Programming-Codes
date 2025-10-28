@@ -26,8 +26,9 @@ class queue {
     const remove = this.front;
     this.front = this.front.next;
 
-    if (!this.front);
-    this.rear = null; //cola queda vacia
+    if (!this.front) {
+      this.rear = null; //cola queda vacia
+    }
 
     this.size--;
 

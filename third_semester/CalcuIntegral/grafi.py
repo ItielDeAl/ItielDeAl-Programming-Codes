@@ -5,25 +5,25 @@ import matplotlib.pyplot as plt
 
 #limites de integracion
 
-a = 1
+a = 0
 
-b = -3
+b = 4
 
 #c = 0
 
 def f(x):
-    return -x**2-3*x+6
+    return 4*x-x**2
 
 def g(x):
     return 3-x
                   
-x=np.linspace(-10, 10, 400)#rango de graficación
+x=np.linspace(-1,6, 400)#rango de graficación
 
 plt.title('Gráfica de la función')
 
 plt.plot(x,f(x),'r--',label='f(x)', color='blue')#gráfica de la función f(x)
 
-plt.plot(x,g(x),label='g(x)', color='brown')#gráfica de la función f(y)
+#plt.plot(x,g(x),label='g(x)', color='brown')#gráfica de la función f(y)
 
 plt.xlabel('eje x')#texto para el eje x
 plt.ylabel('eje y')#texto para el eje y
@@ -32,9 +32,9 @@ plt.axvline(0, color='black', linewidth=1)
 
 plt.axvline(a, color='green', linewidth=1, ls='--', label=a)
 
-plt.axvline(b, color='red', linewidth=1, ls='--', label=b)
+plt.axhline(6, color='red', linewidth=1, label='eje de giro')
 
-plt.axhline(3, color='orange', linewidth=1, label='eje de giro')
+plt.axvline(b, color='orange', linewidth=1,ls='--', label=b)
 
 plt.legend(loc=1)#coloca leyenda para cada gráfica
 plt.grid()#coloca cuadrícula
